@@ -22,7 +22,7 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	%Camera3D.current = true
 
-@rpc("call_local")
+@rpc("any_peer")#broken
 func rename() -> void:
 	label.text = Manager.nick
 
@@ -56,7 +56,7 @@ const MOUSE_SPEED = 0.005
 func _unhandled_input(event):
 	if not is_multiplayer_authority():
 		return
-	if event is InputEventMouseMotion:
+	if event is InputEventMouseMotion and not Input.is_action_pressed("show_mouse"):
 		rotate_y(-event.relative.x * MOUSE_SPEED)
 		%Camera3D.rotate_x(-event.relative.y * MOUSE_SPEED)
 		%Camera3D.rotation.x = clamp(%Camera3D.rotation.x, -PI/2, PI/2)
@@ -64,6 +64,10 @@ func _unhandled_input(event):
 		shoot.rpc()
 	elif event.is_action_pressed("ui_cancel"):
 		get_tree().quit()
+	elif event.is_action_pressed("show_mouse"):
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	elif event.is_action_released("show_mouse"):
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
 @onready var raycast: RayCast3D = %RayCast3D
