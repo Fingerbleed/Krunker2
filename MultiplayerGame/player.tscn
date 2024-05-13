@@ -1,0 +1,121 @@
+[gd_scene load_steps=12 format=3 uid="uid://d28c8d06xytnj"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_ga8yv"]
+[ext_resource type="Texture2D" uid="uid://ci07nduf313ng" path="res://addons/kenney_prototype_textures/green/texture_05.png" id="2_eavbu"]
+[ext_resource type="AudioStream" uid="uid://dfxu5e0ti4g7y" path="res://addons/kenney_interface_sounds/scratch_001.wav" id="3_vh0wx"]
+[ext_resource type="AudioStream" uid="uid://cyisw8du3p32j" path="res://addons/kenney_interface_sounds/error_005.wav" id="4_su4yu"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xcoyb"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_gwww5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4g7ur"]
+albedo_texture = ExtResource("2_eavbu")
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hjpfj"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yb74l"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_0elyp"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("Camera3D:rotation")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tn076"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+
+[node name="player" type="CharacterBody3D"]
+collision_layer = 2
+script = ExtResource("1_ga8yv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_xcoyb")
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_gwww5")
+material = SubResource("StandardMaterial3D_4g7ur")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Camera3D"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.25)
+cast_shadow = 0
+size = Vector3(0.5, 0.3, 0.65)
+material = SubResource("StandardMaterial3D_hjpfj")
+
+[node name="Laser" type="CSGBox3D" parent="Camera3D/CSGBox3D"]
+unique_name_in_owner = true
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 12.4376, -0.0214205, -0.0476685)
+visible = false
+cast_shadow = 0
+size = Vector3(0.1, 0.1, 25)
+material = SubResource("StandardMaterial3D_yb74l")
+
+[node name="RayCast3D" type="RayCast3D" parent="Camera3D/CSGBox3D"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.244292, 0, 1.06783e-08)
+target_position = Vector3(25, 0, 0)
+collision_mask = 2
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_0elyp")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="Panel" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -2.5
+offset_top = -2.5
+offset_right = 2.5
+offset_bottom = 2.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tn076")
+
+[node name="ShootSound" type="AudioStreamPlayer3D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("3_vh0wx")
+
+[node name="KillSound" type="AudioStreamPlayer3D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("4_su4yu")
+
+[node name="Label3D" type="Label3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.25, 0)
+billboard = 1

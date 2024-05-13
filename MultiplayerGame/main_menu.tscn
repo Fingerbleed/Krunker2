@@ -1,0 +1,122 @@
+[gd_scene load_steps=4 format=3 uid="uid://dkrbu3u3ioli1"]
+
+[ext_resource type="Script" path="res://main_menu.gd" id="1_comor"]
+[ext_resource type="Texture2D" uid="uid://c4xexryiurey8" path="res://addons/kenney_prototype_textures/dark/texture_08.png" id="1_orghc"]
+[ext_resource type="AudioStream" uid="uid://ov31yqsuhs0k" path="res://addons/kenney_interface_sounds/back_001.wav" id="3_vonmy"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_comor")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_orghc")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Main" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -176.0
+offset_right = 176.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 50
+alignment = 1
+
+[node name="Label" type="Label" parent="Main"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "KRUNKER 2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Main"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NickEdit" type="TextEdit" parent="Main/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+placeholder_text = "Nickname"
+context_menu_enabled = false
+
+[node name="Button" type="Button" parent="Main/VBoxContainer"]
+layout_mode = 2
+text = "Crear Sala"
+
+[node name="Button2" type="Button" parent="Main/VBoxContainer"]
+layout_mode = 2
+text = "Unirse a Sala"
+
+[node name="Button3" type="Button" parent="Main/VBoxContainer"]
+layout_mode = 2
+text = "Salir"
+
+[node name="Join" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -176.0
+offset_right = 176.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 50
+alignment = 1
+
+[node name="Label" type="Label" parent="Join"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "KRUNKER 2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Join"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TextEdit" type="TextEdit" parent="Join/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "localhost"
+placeholder_text = "localhost"
+context_menu_enabled = false
+
+[node name="Button2" type="Button" parent="Join/VBoxContainer"]
+layout_mode = 2
+text = "Unirse a Sala"
+
+[node name="Button3" type="Button" parent="Join/VBoxContainer"]
+layout_mode = 2
+text = "Volver"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("3_vonmy")
+
+[connection signal="text_changed" from="Main/VBoxContainer/NickEdit" to="." method="_on_nick_edit_text_changed"]
+[connection signal="pressed" from="Main/VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="button_down" from="Main/VBoxContainer/Button2" to="." method="_on_button_2_button_down"]
+[connection signal="button_down" from="Main/VBoxContainer/Button3" to="." method="_on_button_3_button_down"]
+[connection signal="pressed" from="Join/VBoxContainer/Button2" to="." method="joinroom"]
+[connection signal="pressed" from="Join/VBoxContainer/Button3" to="." method="volver"]
